@@ -1,0 +1,15 @@
+{
+  "name": "pokemon_factory_1",
+  "version": "1.0.0",
+  "description": "Pokemon Factory, Challenge #1, Platzi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "hardhat": "^2.13.0"
+  }
+}
