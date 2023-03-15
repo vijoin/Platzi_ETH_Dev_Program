@@ -10,14 +10,19 @@ contract PokemonFactory {
 
     Pokemon[] pokemons;
 
+    mapping(uint => address) pokemonOwners;
+
     function createPokemon(uint _id, string memory _name) public {
         pokemons.push(Pokemon(_id, _name));
-        // push a new pokemon to pokemons
-        // store owner
-        // increase owner counter
+        pokemonOwners[_id] = msg.sender;
+        // TODO increase owner counter
     }
 
     function getAllPokemons() public view returns (Pokemon[] memory) {
         return pokemons;
+    }
+
+    function getOwnerOf(uint _id) public view returns (address) {
+        return pokemonOwners[_id];
     }
 }
