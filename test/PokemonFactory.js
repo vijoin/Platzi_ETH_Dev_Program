@@ -48,4 +48,30 @@ describe("Contract Deploy", function () {
       .to.emit(pokemonFactory, "NewPokemonCreated")
       .withArgs(owner.address, 518, "Musharna");
   });
+
+  describe("Creation input Validations", function () {
+    it("Fails if ID not greater than zero", async function () {
+      const { pokemonFactory } = await loadFixture(deployFixture);
+
+      await expect(
+        pokemonFactory.createPokemon(0, "Fake Pokemon")
+      ).to.be.revertedWith("ID must be greater than Zero");
+    });
+
+    it("Fails if name is empty", async function () {
+      const { pokemonFactory } = await loadFixture(deployFixture);
+
+      await expect(pokemonFactory.createPokemon(99, "")).to.be.revertedWith(
+        "Name must have at least two characters"
+      );
+    });
+
+    it("Fails if name has less than 2 characters", async function () {
+      const { pokemonFactory } = await loadFixture(deployFixture);
+
+      await expect(pokemonFactory.createPokemon(99, "K")).to.be.revertedWith(
+        "Name must have at least two characters"
+      );
+    });
+  });
 });
