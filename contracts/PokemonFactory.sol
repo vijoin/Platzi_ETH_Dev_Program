@@ -12,10 +12,12 @@ contract PokemonFactory {
 
     mapping(uint => address) pokemonOwners;
 
+    mapping(address => uint) ownerCounter;
+
     function createPokemon(uint _id, string memory _name) public {
         pokemons.push(Pokemon(_id, _name));
         pokemonOwners[_id] = msg.sender;
-        // TODO increase owner counter
+        ownerCounter[msg.sender]++;
     }
 
     function getAllPokemons() public view returns (Pokemon[] memory) {
@@ -24,5 +26,9 @@ contract PokemonFactory {
 
     function getOwnerOf(uint _id) public view returns (address) {
         return pokemonOwners[_id];
+    }
+
+    function getOwnedCounter(address _owner) public view returns (uint) {
+        return ownerCounter[_owner];
     }
 }

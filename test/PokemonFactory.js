@@ -29,4 +29,11 @@ describe("Contract Deploy", function () {
     await pokemonFactory.connect(addr1).createPokemon(025, "Pikachu");
     expect(await pokemonFactory.getOwnerOf(025)).to.equal(addr1.address);
   });
+
+  it("Test amount of pokemons owned by owner", async function () {
+    const { pokemonFactory, addr1 } = await loadFixture(deployFixture);
+    await pokemonFactory.connect(addr1).createPokemon(025, "Pikachu");
+    await pokemonFactory.connect(addr1).createPokemon(176, "Togetic");
+    expect(await pokemonFactory.getOwnedCounter(addr1.address)).to.equal(2);
+  });
 });
