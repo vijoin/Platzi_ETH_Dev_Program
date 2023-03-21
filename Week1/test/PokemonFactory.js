@@ -31,7 +31,7 @@ describe("Contract Deploy", function () {
   it("Test pokemon is created and added to the list", async function () {
     const { pokemonFactory } = await loadFixture(deployFixture);
 
-    await pokemonFactory.createPokemon(025, "Pikachu", [], []);
+    await pokemonFactory.createPokemon(025, "Pikachu", [], [], []);
     expect((await pokemonFactory.getAllPokemons()).length).to.equal(1);
   });
 
@@ -42,6 +42,7 @@ describe("Contract Deploy", function () {
       025,
       "Pikachu",
       [type.grass, type.fire],
+      [],
       []
     );
     pokemon = (await pokemonFactory.getAllPokemons())[0];
@@ -55,7 +56,8 @@ describe("Contract Deploy", function () {
       025,
       "Pikachu",
       [],
-      [type.flying, type.ice]
+      [type.flying, type.ice],
+      []
     );
     pokemon = (await pokemonFactory.getAllPokemons())[0];
     expect(await pokemon.weaknesses).to.deep.equal([3, 4]);
@@ -64,27 +66,27 @@ describe("Contract Deploy", function () {
   it("Test that created pokemon has the correct owner", async function () {
     const { pokemonFactory, addr1 } = await loadFixture(deployFixture);
 
-    await pokemonFactory.connect(addr1).createPokemon(025, "Pikachu", [], []);
+    await pokemonFactory.connect(addr1).createPokemon(025, "Pikachu", [], [], []);
     expect(await pokemonFactory.getOwnerOf(025)).to.equal(addr1.address);
   });
 
   it("Test amount of pokemons owned by owner", async function () {
     const { pokemonFactory, addr1 } = await loadFixture(deployFixture);
 
-    await pokemonFactory.connect(addr1).createPokemon(176, "Togetic", [], []);
-    await pokemonFactory.connect(addr1).createPokemon(276, "Taillow", [], []);
+    await pokemonFactory.connect(addr1).createPokemon(176, "Togetic", [], [], []);
+    await pokemonFactory.connect(addr1).createPokemon(276, "Taillow", [], [], []);
     expect(await pokemonFactory.getOwnedCounter(addr1.address)).to.equal(2);
   });
 
   it("Event is emitted on Pokemon creation", async function () {
     const { pokemonFactory, owner } = await loadFixture(deployFixture);
 
-    await expect(await pokemonFactory.createPokemon(518, "Musharna", [], []))
+    await expect(await pokemonFactory.createPokemon(518, "Musharna", [], [], []))
       .to.emit(pokemonFactory, "NewPokemonCreated")
       .withArgs(owner.address, 518, "Musharna");
   });
 
-  describe.only("Skills", function () {
+  describe("Skills", function () {
     it("Test skill creation", async function () {
       const { pokemonFactory } = await loadFixture(deployFixture);
 
@@ -120,7 +122,7 @@ describe("Contract Deploy", function () {
       const { pokemonFactory } = await loadFixture(deployFixture);
 
       await expect(
-        pokemonFactory.createPokemon(0, "Fake Pokemon", [], [])
+        pokemonFactory.createPokemon(0, "Fake Pokemon", [], [], [])
       ).to.be.revertedWith("ID must be greater than Zero");
     });
 
@@ -128,7 +130,7 @@ describe("Contract Deploy", function () {
       const { pokemonFactory } = await loadFixture(deployFixture);
 
       await expect(
-        pokemonFactory.createPokemon(99, "", [], [])
+        pokemonFactory.createPokemon(99, "", [], [], [])
       ).to.be.revertedWith("Name must have at least two characters");
     });
 
@@ -136,7 +138,7 @@ describe("Contract Deploy", function () {
       const { pokemonFactory } = await loadFixture(deployFixture);
 
       await expect(
-        pokemonFactory.createPokemon(99, "K", [], [])
+        pokemonFactory.createPokemon(99, "K", [], [], [])
       ).to.be.revertedWith("Name must have at least two characters");
     });
   });
