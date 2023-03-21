@@ -3,9 +3,20 @@
 pragma solidity ^0.8.9;
 
 contract PokemonFactory {
+    enum PokeType {
+        Grass,
+        Poison,
+        Fire,
+        Flying,
+        Ice,
+        Psychic
+    }
+
     struct Pokemon {
         uint id;
         string name;
+        PokeType[] types;
+        PokeType[] weaknesses;
     }
 
     Pokemon[] pokemons;
@@ -16,10 +27,13 @@ contract PokemonFactory {
 
     event NewPokemonCreated(address owner, uint id, string name);
 
-    function createPokemon(uint _id, string memory _name) public {
+    function createPokemon(uint _id, string memory _name, PokeType[] memory _types, PokeType[] memory _weaknesses) public {
         require(_id > 0, "ID must be greater than Zero");
-        require(bytes(_name).length >= 2, "Name must have at least two characters");
-        pokemons.push(Pokemon(_id, _name));
+        require(
+            bytes(_name).length >= 2,
+            "Name must have at least two characters"
+        );
+        pokemons.push(Pokemon(_id, _name, _types, _weaknesses));
         pokemonOwners[_id] = msg.sender;
         ownerCounter[msg.sender]++;
 
