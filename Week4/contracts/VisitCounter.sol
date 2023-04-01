@@ -2,7 +2,6 @@
 pragma solidity ^0.8.18;
 
 contract VisitCounter {
-
     uint256 count;
 
     event NewVisitor(address indexed visitor, uint256 timestamp);
