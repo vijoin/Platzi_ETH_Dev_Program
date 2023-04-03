@@ -54,8 +54,24 @@ describe("VisitCounter", function () {
         timeOffset = 1;
         await expect(visitCounter.connect(visitor1).visit())
           .to.emit(visitCounter, "NewVisitor")
-          .withArgs(visitor1.address, (await time.latest()) + timeOffset);
+          .withArgs(visitor1.address, 1, (await time.latest()) + timeOffset);
       });
+
+      it("Event show correct amount of visits", async function () {
+        const { visitCounter } = await loadFixture(deploymentFixture);
+
+        const signers = await ethers.getSigners();
+
+        timeOffset = 1;
+        numberofVisits = 10
+        for (i=0; i<numberofVisits; i++){
+          signer = signers[i];
+          await expect(visitCounter.connect(signer).visit())
+            .to.emit(visitCounter, "NewVisitor")
+            .withArgs(signer.address, i+1, (await time.latest()) + timeOffset);
+          }
+        });
+
     });
   });
 });
